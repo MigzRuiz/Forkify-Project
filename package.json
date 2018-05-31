@@ -1,0 +1,24 @@
+{
+  "name": "forkify",
+  "version": "1.0.0",
+  "description": "forkify project",
+  "main": "index.js",
+  "scripts": {
+    "dev": "webpack --mode development",
+    "build": "webpack --mode production"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MigzRuiz/Forkify-Project.git"
+  },
+  "author": "Miguel Ruiz",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/MigzRuiz/Forkify-Project/issues"
+  },
+  "homepage": "https://github.com/MigzRuiz/Forkify-Project#readme",
+  "devDependencies": {
+    "webpack": "^4.10.2",
+    "webpack-cli": "^2.1.4"
+  }
+}
