@@ -1,6 +1,6 @@
 import Search from "./models/Search";
 import * as searchView from "./views/searchView";
-import {elements, renderLoader} from "./views/base";
+import {elements, renderLoader, clearLoader, renderButtons} from "./views/base";
 
 /* Global State of the app
     - Search Object
@@ -20,7 +20,7 @@ const controlSearch = async () => {
         // 2) Create a new search object and add it to state
         state.search = new Search(query);
 
-        // 3) Prep UI
+        // 3) Prep UI = clear previous input, clear previous, loader
         searchView.clearInput();
         searchView.clearResults();
         renderLoader(elements.searchRes);
@@ -29,13 +29,28 @@ const controlSearch = async () => {
         await state.search.getResults(); //Await because the results of getResults is a promise and will need fetch from the server first. EVERY ASYNC FUNCTION returns a promise
 
         // 5) Render result on the UI
-        //console.log(state.search.result);
+        clearLoader();
         searchView.renderResults(state.search.result);
     }
 }
 
+//When the search form is submitted
 elements.searchForm.addEventListener("submit", event => {
     event.preventDefault();
     controlSearch();
 
 });
+
+//When next/prev page is clicked
+elements.searchResPages.addEventListener("click", event => {
+    const btn = event.target.closest(".btn-inline");
+    if(btn){
+        const goToPage = parseInt(btn.dataset.goto, 10); //base10
+
+        //Clear the results first
+        searchView.clearInput();
+        searchView.clearResults();
+        
+        searchView.renderResults(state.search.result, goToPage); //Go to specific page
+    }
+})
