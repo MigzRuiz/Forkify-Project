@@ -59,20 +59,57 @@ export default class Recipe {
             });
 
             //2) Remove Parenthesis
-            ingredient = ingredient.replace(/ *\([^)]*\) */g, ""); //Thanks StackOverflow
+            ingredient = ingredient.replace(/ *\([^)]*\) */g, " "); //Thanks StackOverflow
             
             //3) Parse them into an object with count, unit, ingredients
             //Need to cut the whole ingredient to separate words
             const arrIng = ingredient.split(" ");
 
             //Check if there is a unit (ex: tbsp) in the array of ingredients
-            const unitValues = new Set(unitMap.values())
+            const unitValues = new Set(unitMap.values());
             const unitIndex = arrIng.findIndex(el => unitValues.has(el));
             console.log(unitIndex);
 
+            //Create an obj to store count unit ingredients
+            let objIng;
+        
+            if(unitIndex > -1) {
+                //If there is a unit
+                //1 1/4 cups .... // arrCount is [1, 1/4]
+                //4 cup .... // arrCount is [4]
+                const arrCount = arrIng.slice(0, unitIndex);
 
+                let count;
+                if(arrCount.length === 1){
+                    count = eval(arrIng[0].replace("-","+"));
+                } else {
+                    count = eval(arrCount.join("+")); //"1+1/4" it will do the math
+                } 
 
-            return ingredient;
+                objIng = {
+                    count:count,
+                    unit:arrIng[unitIndex],
+                    ingredient: arrIng.slice(unitIndex+1).join(" ")
+                }
+
+            } else if(parseInt(arrIng[0],10)) {
+                //If there is no unit but there is count
+                objIng = {
+                    count: parseInt(arrIng[0], 10),
+                    unit: "",
+                    ingredient: arrIng.slice(1).join(" ")
+                }
+
+            } else if(unitIndex === -1) { 
+                //If there is no unit and no count
+                objIng = {
+                    count: 1,
+                    unit: "",
+                    ingredient: ingredient
+                }
+            }
+
+            return objIng;
         });
     
         //Assign the new ingredients back
