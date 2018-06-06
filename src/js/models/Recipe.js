@@ -44,7 +44,9 @@ export default class Recipe {
             ["teaspoon","tsp"],
             ["cups","cup"],
             ["pounds","lbs"],
-            ["pound","lb"]
+            ["pound","lb"],
+            ["kilogram","kg"],
+            ["gram","g"]
         ];
 
         //Creating a variable to hold the new objects that's gonna be created
