@@ -12,7 +12,6 @@ import {elements, renderLoader, clearLoader, renderButtons} from "./views/base";
 */
 const state = {};
 
-
 /** SEARCH CONTROLLER */
 const controlSearch = async () => {
     // 1) Get query from view
@@ -22,7 +21,7 @@ const controlSearch = async () => {
     //If query is not empty
     if(query) {
         // 2) Create a new search object and add it to state
-        state.search = new Search(query);
+        state.search = new Search(query);  
         
         // 3) Prep UI = clear previous input, clear previous, loader
         searchView.clearInput();            
