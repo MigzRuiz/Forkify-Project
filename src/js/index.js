@@ -2,12 +2,12 @@ import Search from "./models/Search";
 import Recipe from "./models/Recipe";
 import * as searchView from "./views/searchView";
 import * as recipeView from "./views/recipeView";
-import {elements, renderLoader, clearLoader, renderButtons} from "./views/base";
+import {elements, renderLoader, clearLoader/*, renderButtons*/} from "./views/base";
 
 /* Global State of the app
     - Search Object
-    - Current recipt Object
-    - Shopping list Object
+    - Current Recipe Object
+    - Shopping List Object
     - Liked Recipes
 */
 const state = {};
@@ -16,7 +16,7 @@ const state = {};
 const controlSearch = async () => {
     // 1) Get query from view
     const query = searchView.getInput();
-    //console.log(query);
+        //console.log(query);
 
     //If query is not empty
     if(query) {
@@ -40,26 +40,6 @@ const controlSearch = async () => {
         }
     }
 }
-
-//When the search form is submitted
-elements.searchForm.addEventListener("submit", event => {
-    event.preventDefault();
-    controlSearch();
-});
-
-//When next/prev page is clicked
-elements.searchResPages.addEventListener("click", event => {
-    const btn = event.target.closest(".btn-inline");
-    if(btn){
-        const goToPage = parseInt(btn.dataset.goto, 10); //base10
-
-        //Clear the results first
-        searchView.clearInput();
-        searchView.clearResults();
-        
-        searchView.renderResults(state.search.result, goToPage); //Go to specific page
-    }
-})
 
 /** RECIPE CONTROLLER */
 const controlRecipe = async () => {
@@ -97,6 +77,27 @@ const controlRecipe = async () => {
     }
 
 };
+
+/** EVENT LISTENERS */
+//When the search form is submitted
+elements.searchForm.addEventListener("submit", event => {
+    event.preventDefault();
+    controlSearch();
+});
+
+//When next/prev page is clicked
+elements.searchResPages.addEventListener("click", event => {
+    const btn = event.target.closest(".btn-inline");
+    if(btn){
+        const goToPage = parseInt(btn.dataset.goto, 10); //base10
+
+        //Clear the results first
+        searchView.clearInput();
+        searchView.clearResults();
+        
+        searchView.renderResults(state.search.result, goToPage); //Go to specific page
+    }
+});
 
 //When there is a hashchange
 //window.addEventListener("hashchange", controlRecipe);
