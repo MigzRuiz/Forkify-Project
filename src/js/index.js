@@ -85,6 +85,11 @@ elements.searchForm.addEventListener("submit", event => {
     controlSearch();
 });
 
+//When there is a hashchange
+//window.addEventListener("hashchange", controlRecipe);
+//window.addEventListener("load", controlRecipe);
+["hashchange","load"].forEach(event => window.addEventListener(event, controlRecipe));
+
 //When next/prev page is clicked
 elements.searchResPages.addEventListener("click", event => {
     const btn = event.target.closest(".btn-inline");
@@ -99,9 +104,18 @@ elements.searchResPages.addEventListener("click", event => {
     }
 });
 
-//When there is a hashchange
-//window.addEventListener("hashchange", controlRecipe);
-//window.addEventListener("load", controlRecipe);
-["hashchange","load"].forEach(event => window.addEventListener(event, controlRecipe));
-
-
+//When servings is either decreased or increased
+elements.recipe.addEventListener("click", event => {
+    if(event.target.matches(".btn-decrease, .btn-decrease *")){
+        //Decrease button is clicked
+        if(state.recipe.servings > 1 ){
+            state.recipe.updateServings("dec");
+            recipeView.updateServingsIngredients(state.recipe);
+        }
+    } else if(event.target.matches(".btn-increase, .btn-increase *")){
+        //Increase button is clicked
+        state.recipe.updateServings("inc");
+        recipeView.updateServingsIngredients(state.recipe);
+    }
+    console.log(state.recipe);
+});
