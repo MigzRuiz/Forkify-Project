@@ -1,5 +1,6 @@
 import Search from "./models/Search";
 import Recipe from "./models/Recipe";
+import List from "./models/List";
 import * as searchView from "./views/searchView";
 import * as recipeView from "./views/recipeView";
 import {elements, renderLoader, clearLoader/*, renderButtons*/} from "./views/base";
@@ -77,6 +78,10 @@ const controlRecipe = async () => {
     }
 
 };
+
+/** LIST CONTROLLER */
+
+window.l = new List();
 
 /** EVENT LISTENERS */
 //When the search form is submitted
