@@ -3,6 +3,7 @@ import Recipe from "./models/Recipe";
 import List from "./models/List";
 import * as searchView from "./views/searchView";
 import * as recipeView from "./views/recipeView";
+import * as listView from "./views/listView";
 import {elements, renderLoader, clearLoader/*, renderButtons*/} from "./views/base";
 
 /* Global State of the app
@@ -12,6 +13,7 @@ import {elements, renderLoader, clearLoader/*, renderButtons*/} from "./views/ba
     - Liked Recipes
 */
 const state = {};
+window.state = state;
 
 /** SEARCH CONTROLLER */
 const controlSearch = async () => {
@@ -83,6 +85,18 @@ const controlRecipe = async () => {
 
 window.l = new List();
 
+const controlList = () => {
+    // Create a new list if there is none yet
+    if(!state.list) state.list = new List();
+
+    //Add each ingredient in the list and render it on screen
+    state.recipe.ingredients.forEach(element => {
+        const item = state.list.addItem(element.count, element.unit, element.ingredient);
+        listView.renderItem(item);
+    });
+}
+
+
 /** EVENT LISTENERS */
 //When the search form is submitted
 elements.searchForm.addEventListener("submit", event => {
@@ -109,6 +123,8 @@ elements.searchResPages.addEventListener("click", event => {
     }
 });
 
+
+//Handles all events in the recipe section
 //When servings is either decreased or increased
 elements.recipe.addEventListener("click", event => {
     if(event.target.matches(".btn-decrease, .btn-decrease *")){
@@ -121,6 +137,28 @@ elements.recipe.addEventListener("click", event => {
         //Increase button is clicked
         state.recipe.updateServings("inc");
         recipeView.updateServingsIngredients(state.recipe);
+    } else if(event.target.matches(".recipe__btn--add, .recipe__btn--add *")){
+        controlList();
     }
     console.log(state.recipe);
+});
+
+
+//Handles all events in the list section
+elements.shopping.addEventListener("click", event => {
+    const id = event.target.closest(".shopping__item").dataset.itemid;
+
+    //handle delete
+    if (event.target.matches(".shopping__delete, .shopping__delete *")) {
+        //delete from state
+        state.list.deleteItem(id);
+
+        //delete from user interface
+        listView.deleteItem(id);
+    } 
+    //handle the count update
+    else if (event.target.matches(".shopping__count-value")){
+        const val = parseFloat(event.target.value, 10);
+        state.list.updateCount(id, val);
+    }
 });
