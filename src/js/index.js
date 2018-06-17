@@ -15,7 +15,6 @@ import {elements, renderLoader, clearLoader/*, renderButtons*/} from "./views/ba
     - Liked Recipes
 */
 const state = {};
-window.state = state;
 
 /** SEARCH CONTROLLER */
 const controlSearch = async () => {
@@ -65,7 +64,6 @@ const controlRecipe = async () => {
         try {
             //4) Get recipe data and parseIngredients
             await state.recipe.getRecipe();
-            console.log(state.recipe.ingredients);
             state.recipe.parseIngredients();
 
             //5) Calculate servings and time
@@ -88,8 +86,6 @@ const controlRecipe = async () => {
 
 /** LIST CONTROLLER */
 
-//window.l = new List();
-
 const controlList = () => {
     // Create a new list if there is none yet
     if(!state.list) state.list = new List();
@@ -102,9 +98,6 @@ const controlList = () => {
 }
 
 /** LIKES CONTROLLER */
-state.likes = new Likes();
-likesView.toggleLikeMenu(state.likes.getNumLikes());
-
 const controlLike = () => {
     if(!state.likes) state.likes = new Likes();
     const currentID = state.recipe.id;
@@ -138,6 +131,19 @@ const controlLike = () => {
 }
 
 /** EVENT LISTENERS */
+//Restore liked recipe when page loads
+window.addEventListener("load", () => {
+    state.likes = new Likes();
+    // Restore likes
+    state.likes.readStorage();
+
+    //Toggle Button
+    likesView.toggleLikeMenu(state.likes.getNumLikes());
+
+    //Render existing likes;
+    state.likes.likes.forEach(like => likesView.renderLike(like));
+});
+
 //When the search form is submitted
 elements.searchForm.addEventListener("submit", event => {
     event.preventDefault();
@@ -184,7 +190,6 @@ elements.recipe.addEventListener("click", event => {
         //Like controller
         controlLike();
     }
-    console.log(state.recipe);
 });
 
 
